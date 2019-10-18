@@ -21,8 +21,23 @@ using namespace std;
 
 TDHCPServer * ptr = 0;
 
+
+char user_defined_workdir[256];
+char user_defined_server_conf[256];
+char user_defined_relay_conf[256];
+char user_defined_resolv[256];
+char user_defined_ntpconf[256];
+char user_defined_radvf[256];
+char user_defined_server_pid_file[256];
+char user_defined_relay_pid_file[256];
+char user_defined_aaaspi_file[256];
+char user_defined_srv_keymap_file[256];
+char user_defined_server_log_file[256];
+char user_defined_relay_log_file[256];
+
+
 /// the default working directory
-std::string WORKDIR(DEFAULT_WORKDIR);
+std::string WORKDIR;
 
 void signal_handler(int n) {
     Log(Crit) << "Signal received. Shutting down." << LogEnd;
@@ -82,7 +97,7 @@ int run() {
 
 int help() {
     cout << "Usage:" << endl;
-    cout << " dibbler-server ACTION" << endl
+    cout << " dibbler-server ACTION SERVER_CONF_FILE WORKDIR  " << endl
 	 << " ACTION = status|start|stop|run" << endl
 	 << " status    - show status and exit" << endl
 	 << " start     - start installed service" << endl
@@ -110,6 +125,37 @@ int main(int argc, char * argv[])
     } else {
 	memset(command,0,256);
     }
+
+    //PARSE SERVER CONFIGURATION FILE
+    if (argc>2) {
+	int len = strlen(argv[2])+1;
+	if (len>255)
+	    len = 255;
+	strncpy(user_defined_server_conf,argv[2],len);
+    } else {
+	memset(user_defined_server_conf,0,256);
+    }
+
+    // parse workdir
+    if (argc>3) {
+	int len = strlen(argv[3])+1;
+	if (len>255)
+	    len = 255;
+	strncpy(user_defined_workdir,argv[3],len);
+    } else {
+	memset(user_defined_workdir,0,256);
+    }
+
+    WORKDIR = user_defined_workdir;
+    strncpy(user_defined_server_pid_file, (WORKDIR + "/server.pid").c_str(), strlen((WORKDIR + "/server.pid").c_str()));
+    strncpy(user_defined_relay_pid_file, (WORKDIR + "/relay.pid").c_str(), strlen((WORKDIR + "/relay.pid").c_str()));
+    strncpy(user_defined_aaaspi_file, (WORKDIR + "/AAA/AAA-SPI").c_str(), strlen((WORKDIR + "/AAA/AAA-SPI").c_str()));
+    strncpy(user_defined_srv_keymap_file, (WORKDIR + "/AAA/keys-mapping").c_str(), strlen((WORKDIR + "/AAA/keys-mapping").c_str()));
+
+    strncpy(user_defined_server_log_file, (WORKDIR + "/dibbler-server.log").c_str(), strlen((WORKDIR + "/dibbler-server.log").c_str()));
+    strncpy(user_defined_relay_log_file, (WORKDIR + "/dibbler-relay.log").c_str(), strlen((WORKDIR + "/dibbler-relay.log").c_str()));
+
+
 
     if (!strncasecmp(command,"start",5) ) {
 	result = start(SRVPID_FILE, WORKDIR.c_str());

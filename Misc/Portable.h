@@ -10,6 +10,19 @@
  *
  */
 
+extern char user_defined_workdir[256];
+extern char user_defined_server_conf[256];
+extern char user_defined_relay_conf[256];
+extern char user_defined_resolv[256];
+extern char user_defined_ntpconf[256];
+extern char user_defined_radvf[256];
+extern char user_defined_server_pid_file[256];
+extern char user_defined_relay_pid_file[256];
+extern char user_defined_aaaspi_file[256];
+extern char user_defined_srv_keymap_file[256];
+extern char user_defined_server_log_file[256];
+extern char user_defined_relay_log_file[256];
+
 #ifndef PORTABLE_H
 #define PORTABLE_H
 
@@ -164,7 +177,7 @@ struct link_state_notify_t
 #define DEFAULT_WORKDIR       "/var/db/dibbler"
 #else
 #if !defined(WIN32)
-#define DEFAULT_WORKDIR       "/var/lib/dibbler"
+#define DEFAULT_WORKDIR       user_defined_workdir //"/var/lib/dibbler"
 #endif
 #endif
 #endif
@@ -175,7 +188,7 @@ struct link_state_notify_t
 #define DEFAULT_CLNTLOG_FILE  "/var/log/dibbler/dibbler-client.log"
 
 #define DEFAULT_SCRIPT     ""
-#define SRVCONF_FILE       "/etc/dibbler/server.conf"
+#define SRVCONF_FILE       user_defined_server_conf //"/etc/dibbler/server.conf"
 #define RELCONF_FILE       "/etc/dibbler/relay.conf"
 #define RESOLVCONF_FILE    "/etc/resolv.conf"
 #define NTPCONF_FILE       "/etc/ntp.conf"
@@ -187,14 +200,14 @@ struct link_state_notify_t
 #define CLNT_AAASPI_FILE   "/var/db/dibbler/AAA/AAA-SPI"
 #define SRV_KEYMAP_FILE    "/var/db/dibbler/AAA/keys-mapping"
 #else
-#define SRVPID_FILE        "/var/lib/dibbler/server.pid"
-#define RELPID_FILE        "/var/lib/dibbler/relay.pid"
-#define CLNT_AAASPI_FILE   "/var/lib/dibbler/AAA/AAA-SPI"
-#define SRV_KEYMAP_FILE    "/var/lib/dibbler/AAA/keys-mapping"
+#define SRVPID_FILE        user_defined_server_pid_file //"/var/lib/dibbler/server.pid"
+#define RELPID_FILE        user_defined_relay_pid_file //"/var/lib/dibbler/relay.pid"
+#define CLNT_AAASPI_FILE   user_defined_aaaspi_file //"/var/lib/dibbler/AAA/AAA-SPI"
+#define SRV_KEYMAP_FILE    user_defined_srv_keymap_file //"/var/lib/dibbler/AAA/keys-mapping"
 #endif
 
-#define SRVLOG_FILE        "/var/log/dibbler/dibbler-server.log"
-#define RELLOG_FILE        "/var/log/dibbler/dibbler-relay.log"
+#define SRVLOG_FILE        user_defined_server_log_file //"/var/log/dibbler/dibbler-server.log"
+#define RELLOG_FILE        user_defined_relay_log_file //"/var/log/dibbler/dibbler-relay.log"
 #define NULLFILE           "/dev/null"
 
 /* those defines were initially used on Linux only, but hopefully
